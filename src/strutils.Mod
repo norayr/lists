@@ -194,7 +194,12 @@ VAR
   l, n : INTEGER;
 BEGIN
   n := WordCount(s, ch);
-  NEW (pstrs, n);
+  IF n # 0 THEN
+    NEW (pstrs, n)
+  ELSE
+    pstrs := NIL;
+    RETURN pstrs
+  END;
   IF n = 1 THEN
     RemoveRightChars (s, ch);
     RemoveLeftChars (s, ch);
