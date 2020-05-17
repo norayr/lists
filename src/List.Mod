@@ -4,7 +4,6 @@ IMPORT S := lDefs;
 
 TYPE 
      TObject* = S.TObject;
-     integer* = S.integer;
 
         Node* = POINTER TO NodeDesc;
 
@@ -19,19 +18,19 @@ TYPE
       Create* : PROCEDURE () : TList;
         Free* : PROCEDURE (l : TList);
        Clear* : PROCEDURE (l : TList);
-         Add* : PROCEDURE (l : TList; s : TObject) : integer;
+         Add* : PROCEDURE (l : TList; s : TObject) : LONGINT;
       Append* : PROCEDURE (l : TList; s : TObject);
   AppendList* : PROCEDURE (src, dst : TList);
-      Insert* : PROCEDURE (l : TList; i : integer; s : TObject);
-      Delete* : PROCEDURE (l : TList; i : integer);
+      Insert* : PROCEDURE (l : TList; i : LONGINT; s : TObject);
+      Delete* : PROCEDURE (l : TList; i : LONGINT);
        Empty* : PROCEDURE (l : TList) : BOOLEAN;
-         Get* : PROCEDURE (l : TList; k : integer) : Node;
+         Get* : PROCEDURE (l : TList; k : LONGINT) : Node;
 First*, Last* : Node;
          res* : BOOLEAN;
-       Count* : integer;
+       Count* : LONGINT;
    END;
 
- PROCEDURE Add* ( l : TList; s : TObject) : integer;
+ PROCEDURE Add* ( l : TList; s : TObject) : LONGINT;
  VAR
    e : Node;
  BEGIN
@@ -69,7 +68,7 @@ First*, Last* : Node;
 
  PROCEDURE AppendList* (s, l : TList);
  VAR e : Node;
-     i : integer;
+     i : LONGINT;
  BEGIN
    l.res := FALSE;
    IF s # NIL THEN
@@ -86,10 +85,10 @@ First*, Last* : Node;
 
 
 
- PROCEDURE Insert*(l : TList; i : integer; s : TObject);
+ PROCEDURE Insert*(l : TList; i : LONGINT; s : TObject);
  VAR
    e, u, p : Node;
-         j : integer;
+         j : LONGINT;
  BEGIN
     l.res := FALSE; 
     NEW(e);
@@ -126,8 +125,8 @@ First*, Last* : Node;
  
  END Free;
 
- PROCEDURE Get*(l : TList; k : integer) : Node;
- VAR i : integer;
+ PROCEDURE Get*(l : TList; k : LONGINT) : Node;
+ VAR i : LONGINT;
      e : Node;
  BEGIN
     NEW(e);
@@ -145,8 +144,8 @@ First*, Last* : Node;
     RETURN e;
  END Get;
 
- PROCEDURE Delete* (l : TList; k : integer);
- VAR i : integer;
+ PROCEDURE Delete* (l : TList; k : LONGINT);
+ VAR i : LONGINT;
      e, p : Node;
  BEGIN
     l.res := FALSE;

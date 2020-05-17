@@ -7,7 +7,6 @@ TYPE
       TObject* = S.TObject;
   TObjectDesc* = S.TObjectDesc;
        string* = S.string;
-      integer* = S.integer;
    
   TString* = POINTER TO TStringDesc;
   
@@ -23,13 +22,13 @@ TYPE
       TStringList* = POINTER TO TStringListDesc;
 
       TStringListDesc* = RECORD (List.TListDesc)
-	 IndexOf* : PROCEDURE (VAR l : TStringList; s : string) : integer;
-       AddString* : PROCEDURE (l : TStringList; s : string) : integer;
+	 IndexOf* : PROCEDURE (VAR l : TStringList; s : string) : LONGINT;
+       AddString* : PROCEDURE (l : TStringList; s : string) : LONGINT;
     AppendString* : PROCEDURE (l : TStringList; s : string);
       END;
 
- PROCEDURE IndexOf*(VAR l : TStringList; s : string): integer;
- VAR i : integer;
+ PROCEDURE IndexOf*(VAR l : TStringList; s : string): LONGINT;
+ VAR i : LONGINT;
      found : BOOLEAN;
      e : Node;
  BEGIN
@@ -55,9 +54,9 @@ TYPE
     END
  END IndexOf;
 
- PROCEDURE AddString* (l : TStringList; s : string) : integer;
+ PROCEDURE AddString* (l : TStringList; s : string) : LONGINT;
     VAR str : TString;
-    i : integer;
+    i : LONGINT;
  BEGIN
     NEW(str);
     COPY (s, str^.str); (*str^.str := s;*)

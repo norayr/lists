@@ -8,7 +8,6 @@ TYPE
    strings* = POINTER TO ARRAY OF string;
    pstring* = POINTER TO ARRAY OF CHAR;
    pstrings* = POINTER TO ARRAY OF pstring;
-   integer* = LONGINT(*INTEGER*);
 
    TObject* = POINTER TO TObjectDesc;
    TObjectDesc* = RECORD
