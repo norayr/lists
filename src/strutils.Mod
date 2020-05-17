@@ -1,8 +1,9 @@
 MODULE strutils;
-IMPORT S := Sys, Strings;
+IMPORT S := lDefs, Strings;
  TYPE string* = S.string;
-      pstring* = POINTER TO string;
       strings* = POINTER TO ARRAY OF string;
+      pstring* = POINTER TO ARRAY OF CHAR;
+      pstrings*= POINTER TO ARRAY OF pstring;
 (* from the oo2c Strings module, implements string comparison, which should be implemented in a library level in case of Oberon-1 *)
 TYPE  CompareResults* = SHORTINT;
   (**Result type of @oproc{Compare}.  *)
@@ -18,6 +19,7 @@ CONST
   (**Result of @oproc{Compare} if the first argument is lexically greater
      than the second one.  *)
 
+(* this function copied from ooc source and may be considered a duplicate. *)
  PROCEDURE Compare* (stringVal1, stringVal2: ARRAY OF CHAR): CompareResults;
 (**Returns @oconst{less}, @oconst{equal}, or @oconst{greater}, according as
    @oparam{stringVal1} is lexically less than, equal to, or greater than
@@ -38,13 +40,30 @@ CONST
     END
   END Compare;  
 
+(* this function copied from ooc source and may be considered a duplicate. *)
+PROCEDURE Assign* (source: ARRAY OF CHAR; VAR destination: ARRAY OF CHAR);
+(**Copies @oparam{source} to @oparam{destination}.  Equivalent to the
+   predefined procedure @code{COPY}.  Unlike @code{COPY}, this procedure can be
+   assigned to a procedure variable.  *)
+  VAR
+    i: INTEGER;
+  BEGIN
+    i := -1;
+    REPEAT
+      INC (i);
+      destination[i] := source[i]
+    UNTIL (destination[i] = 0X) OR (i = LEN (destination)-1);
+    destination[i] := 0X
+  END Assign;
+
 PROCEDURE Pos* (substr : CHAR ; s : ARRAY OF CHAR; n : INTEGER) : INTEGER;
-VAR i : INTEGER;
+VAR 
+  i : INTEGER;
 BEGIN
-FOR i := n TO Strings.Length(s) DO
-IF s[i] = substr THEN RETURN(i) END;
-END;
-RETURN(0);
+  FOR i := n TO Strings.Length(s) DO
+    IF s[i] = substr THEN RETURN(i) END;
+  END;
+  RETURN(0);
 END Pos;
 
 PROCEDURE RemoveLeftChars* (VAR s : ARRAY OF CHAR; ch : CHAR);
@@ -70,139 +89,138 @@ END RemoveRightChars;
 
 PROCEDURE WordCount* (s : ARRAY OF CHAR; ch : CHAR) : INTEGER;
 VAR 
-k,l : INTEGER;
+  k,l : INTEGER;
 BEGIN
-RemoveLeftChars(s, ch);
-RemoveRightChars (s, ch);
-k := 0;
-l := 0;
-REPEAT 
-IF s[l] = ch THEN 
-   INC(k);
+  RemoveLeftChars(s, ch);
+  RemoveRightChars (s, ch);
+  k := 0;
+  l := 0;
+  REPEAT 
+    IF s[l] = ch THEN 
+      INC(k);
       REPEAT
-      INC(l);
+        INC(l);
       UNTIL s[l] # ch;
-        END;
-INC(l);
-UNTIL l = Strings.Length(s);
-INC(k);
-RETURN(k);
-
-
+    END;
+    INC(l);
+  UNTIL l = Strings.Length(s);
+  INC(k);
+  RETURN(k);
 END WordCount;
 
-
 PROCEDURE NumberOfChar* (s : ARRAY OF CHAR; ch : CHAR) : LONGINT;
-VAR n, i : LONGINT;
+VAR
+  n, i : LONGINT;
 BEGIN
-n := 0;
-FOR i := 0 TO Strings.Length(s) DO
-IF s[i] = ch THEN INC(n) END;
-END;
-RETURN(n);
+  n := 0;
+  FOR i := 0 TO Strings.Length(s) DO
+    IF s[i] = ch THEN INC(n) END;
+  END;
+  RETURN(n);
 END NumberOfChar;
 
 PROCEDURE Rpos* ( s : ARRAY OF CHAR ; ch : CHAR) : INTEGER;
-VAR l : INTEGER;
+VAR
+  l : INTEGER;
 BEGIN
-l := Strings.Length (s);
-IF s[l] = ch THEN RETURN(l) END;
-REPEAT
-DEC(l);
-UNTIL s[l] = ch;
-RETURN(l);
+  l := Strings.Length (s);
+  IF s[l] = ch THEN RETURN(l) END;
+  REPEAT
+    DEC(l);
+  UNTIL s[l] = ch;
+  RETURN(l);
 END Rpos;
 
 PROCEDURE Lpos* ( s : ARRAY OF CHAR ; ch : CHAR) : INTEGER;
-VAR l : INTEGER;
+VAR
+  l : INTEGER;
 BEGIN
-l := 0;
-IF s[l] = ch THEN RETURN(l) END;
-REPEAT
-INC(l);
-IF s[l] = ch THEN RETURN(l) END;
-UNTIL l = Strings.Length(s);
-RETURN(0);
+  l := 0;
+  IF s[l] = ch THEN RETURN(l) END;
+  REPEAT
+    INC(l);
+    IF s[l] = ch THEN RETURN(l) END;
+  UNTIL l = Strings.Length(s);
+  RETURN(0);
 END Lpos;
 
-PROCEDURE ExtractWord* (n : INTEGER; s : string; ch : CHAR) : pstring;
-VAR i,j, k, l : INTEGER;
-str : string;
-pstr : pstring;
+PROCEDURE string2pstring(s: ARRAY OF CHAR; VAR d : pstring);
 BEGIN
-RemoveLeftChars (s, ch);
-RemoveRightChars (s, ch);
-IF n = WordCount (s, ch) THEN
-l := Rpos (s, ch);
-Strings.Extract (s, l+1, Strings.Length(s)-l, str);
-NEW(pstr);
-pstr^ := str;
-RETURN (pstr);
-END;
+  NEW(d, Strings.Length(s)+1);
+  Assign (s, d^);
+END string2pstring;
 
-IF n = 1 THEN
-l := Lpos(s, ch);
-Strings.Extract (s, 0, l, str);
-NEW(pstr);
-pstr^ := str;
-RETURN (pstr);
-END;
-
-j := 0;
-k := 0;
-l := 0;
-i := 0;
-
-REPEAT
-  IF s[i] = ch THEN INC(j) ;
-            IF j = (n-1) THEN k := i  END;
-         
-           IF j = n THEN l := i END;
-  END;
-  INC(i);
-UNTIL i = Strings.Length(s);
-
-NEW (pstr);
-Strings.Extract(s, k+1, l-k-1, str);
-pstr^ := str;
-RETURN (pstr);
-
-
-
+PROCEDURE ExtractWord* (n : INTEGER; s : string; ch : CHAR) : pstring;
+VAR
+  i, j, k, l : INTEGER;
+  str : string;
+  pstr : pstring;
+BEGIN
+  RemoveLeftChars (s, ch);
+  RemoveRightChars (s, ch);
+  IF n = WordCount (s, ch) THEN
+    l := Rpos (s, ch);
+    Strings.Extract (s, l+1, Strings.Length(s)-l-1, str);
+    string2pstring(str, pstr);
+    RETURN (pstr);
+  ELSIF n = 1 THEN
+    l := Lpos(s, ch);
+    Strings.Extract (s, 0, l, str);
+    string2pstring(str, pstr);
+    RETURN (pstr);
+  ELSE
+    j := 0;
+    k := 0;
+    l := 0;
+    i := 0;
+    REPEAT
+      IF s[i] = ch THEN
+        INC(j) ;
+        IF j = (n-1) THEN k := i  END;
+        IF j = n THEN l := i END;
+      END;
+      INC(i);
+    UNTIL i = Strings.Length(s);
+    Strings.Extract(s, k+1, l-k-1, str);
+    string2pstring(str, pstr);
+    RETURN (pstr)
+    END
 END ExtractWord;
 
-PROCEDURE tokenize*(s : string; ch : CHAR) : strings;
+PROCEDURE tokenize*(s : string; ch : CHAR) : pstrings;
 VAR 
-  strs : strings;
-  pstr : pstring;
+  pstr  : pstring;
+  pstrs : pstrings;
   l, n : INTEGER;
 BEGIN
   n := WordCount(s, ch);
-  NEW (strs, n);
+  NEW (pstrs, n);
   IF n = 1 THEN
     RemoveRightChars (s, ch);
     RemoveLeftChars (s, ch);
-    strs^[0] := s;
-    RETURN (strs);
+    string2pstring(s, pstrs^[0]);
+  ELSE
+    l := 0;
+    REPEAT
+      pstr := ExtractWord ( l+1, s, ch);
+      pstrs^[l] := pstr;
+      INC(l);
+    UNTIL l = n;
   END;
-  l := 0;
-  REPEAT
-    pstr := ExtractWord ( l+1, s, ch);
-    strs^[l] := pstr^;
-    INC(l);
-  UNTIL l = n;
-  RETURN (strs); 
+  RETURN pstrs
 END tokenize;
 
-PROCEDURE Assign* (src : ARRAY OF CHAR ; VAR dst : ARRAY OF CHAR); 
+(* copies all array, even after 0X, but puts 0X in the end *)
+
+PROCEDURE copyAll* (src : ARRAY OF CHAR ; VAR dst : ARRAY OF CHAR); 
 VAR i, k : LONGINT;
 BEGIN
-IF LEN (src) < LEN(dst) THEN k := LEN(src) ELSE k := LEN(dst)  END;
-FOR i := 0 TO k-2 DO
-dst[i] := src[i];
-END;
-dst[k-1] := 0X;
-END Assign;
+  IF LEN (src) < LEN(dst) THEN k := LEN(src) ELSE k := LEN(dst)  END;
+  FOR i := 0 TO k-2 DO
+    dst[i] := src[i];
+  END;
+  dst[k-1] := 0X;
+END copyAll;
 
 BEGIN
 

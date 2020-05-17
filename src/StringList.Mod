@@ -1,6 +1,6 @@
 MODULE StringList;
 (* Oberon implementation without methods *)
-IMPORT S := Sys, List, strutils;
+IMPORT S := lDefs, List, strutils;
 
 TYPE 
 

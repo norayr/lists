@@ -1,6 +1,6 @@
 MODULE List;
 (* Oberon implementation without methods *)
-IMPORT S := Sys;
+IMPORT S := lDefs;
 
 TYPE 
      TObject* = S.TObject;
