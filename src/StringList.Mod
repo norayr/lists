@@ -37,6 +37,13 @@ TYPE
    END
  END Copy;
 
+ PROCEDURE TStringFromString*(VAR s: ARRAY OF CHAR; d: TString);
+ BEGIN
+   NEW(d);
+   NEW(d.str, Strings.Length(s)+1);
+   COPY(s, d.str^)
+ END TStringFromString;
+
  PROCEDURE IndexOf*(VAR l : TStringList; s : ARRAY OF CHAR): LONGINT;
  VAR
    i : LONGINT;
