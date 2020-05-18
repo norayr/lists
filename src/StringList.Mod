@@ -7,6 +7,7 @@ TYPE
       TObject* = S.TObject;
   TObjectDesc* = S.TObjectDesc;
        pstring* = S.pstring;
+       pstrings* = POINTER TO ARRAY OF pstring;
    
   TString* = POINTER TO TStringDesc;
   
@@ -97,12 +98,18 @@ l.AppendString:= AppendString;
     RETURN(l);
  END Create;
 
-(* PROCEDURE Delete* (VAR l : StringList; VAR e : Str);
- BEGIN
-    e := l.First;
-    l.First := l.First.next;
-    IF l.First = NIL THEN l.Last := NIL END;
- END Delete;
-*)
- 
+PROCEDURE StringListTopstrings*(VAR s: TStringList; VAR d: pstrings);
+VAR
+  e  : Node;
+  i  : INTEGER;
+BEGIN
+  NEW(d, s.Count);
+  i := 0;
+  REPEAT
+    e := s.Get(s, i);
+    d[i] := e.obj(TString).str;
+    INC(i)
+  UNTIL i = s.Count;
+END StringListTopstrings;
+
 END StringList.

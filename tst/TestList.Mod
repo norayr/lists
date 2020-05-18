@@ -9,15 +9,12 @@ VAR
 
 PROCEDURE list(VAR s : StringList.TStringList);
 VAR e : StringList.Node;
-       i : INTEGER;
-    L : StringList.TList;   
+    i : INTEGER;
 BEGIN
    NEW(e);
    i := 0;
-   NEW(L);
-   L := s;
    REPEAT
-      e := s.Get(L, i);
+      e := s.Get(s, i);
       IF e # NIL THEN Out.String (e.obj(StringList.TString).str^); Out.Ln END;
       (*Out.String (e.string); Out.Ln;*)
       INC(i);
