@@ -4,7 +4,7 @@ IMPORT S := lDefs;
 
 TYPE 
      TObject* = S.TObject;
-
+     TObjectDesc* = S.TObjectDesc;
         Node* = POINTER TO NodeDesc;
 
     NodeDesc* = RECORD
