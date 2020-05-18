@@ -28,6 +28,15 @@ TYPE
     AppendString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR);
       END;
 
+ PROCEDURE Copy*(VAR s, d: TString);
+ BEGIN
+   IF s.str # NIL THEN
+     NEW(d);
+     NEW(d.str, Strings.Length(s.str^)+1);
+     COPY(s.str^, d.str^)
+   END
+ END Copy;
+
  PROCEDURE IndexOf*(VAR l : TStringList; s : ARRAY OF CHAR): LONGINT;
  VAR
    i : LONGINT;
