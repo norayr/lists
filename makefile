@@ -13,10 +13,11 @@ all:
 
 tests: all
 		cd $(BLD) && \
-		$(VOC) -../tst/TestList.Mod -m
+		$(VOC) ../tst/TestList.Mod -m
 		cd $(BLD) && \
 		$(VOC) ../tst/TestStrutils.Mod -m
 		$(BLD)/TestStrutils
+		$(BLD)/TestList
 
 clean:
 		if [ -d "$(BLD)" ]; then rm -rf $(BLD); fi

@@ -1,17 +1,17 @@
 MODULE StringList;
 (* Oberon implementation without methods *)
-IMPORT S := lDefs, List, strutils;
+IMPORT Strings, S := lDefs, List, strutils;
 
 TYPE 
 
       TObject* = S.TObject;
   TObjectDesc* = S.TObjectDesc;
-       string* = S.string;
+       pstring* = S.pstring;
    
   TString* = POINTER TO TStringDesc;
   
   TStringDesc =RECORD (S.TObjectDesc)
-      str* : string
+      str* : pstring
   END;
    
      Node* = List.Node;
@@ -22,53 +22,55 @@ TYPE
       TStringList* = POINTER TO TStringListDesc;
 
       TStringListDesc* = RECORD (List.TListDesc)
-	 IndexOf* : PROCEDURE (VAR l : TStringList; s : string) : LONGINT;
-       AddString* : PROCEDURE (l : TStringList; s : string) : LONGINT;
-    AppendString* : PROCEDURE (l : TStringList; s : string);
+	 IndexOf* : PROCEDURE (VAR l : TStringList; s : ARRAY OF CHAR) : LONGINT;
+       AddString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
+    AppendString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR);
       END;
 
- PROCEDURE IndexOf*(VAR l : TStringList; s : string): LONGINT;
- VAR i : LONGINT;
-     found : BOOLEAN;
-     e : Node;
+ PROCEDURE IndexOf*(VAR l : TStringList; s : ARRAY OF CHAR): LONGINT;
+ VAR
+   i : LONGINT;
+   found : BOOLEAN;
+   e : Node;
  BEGIN
-    found := FALSE;
-    NEW(e);
-    e := l.First;
-    i := 0;
+   found := FALSE;
+   NEW(e);
+   e := l.First;
+   i := 0;
     
-    REPEAT
-
-          IF strutils.Compare (s, e.obj(TString).str) = strutils.equal THEN
-              found := TRUE;	  
-          ELSE
-             e := e.next;       
-             INC(i);
-          END;
-
-    UNTIL found OR (i = l.Count);
-    IF found THEN
-       RETURN i
-    ELSE
-       RETURN -1
-    END
+   REPEAT
+     IF strutils.Compare (s, e.obj(TString).str^) = strutils.equal THEN
+       found := TRUE;	  
+     ELSE
+       e := e.next;       
+       INC(i);
+     END;
+   UNTIL found OR (i = l.Count);
+   IF found THEN
+     RETURN i
+   ELSE
+     RETURN -1
+   END
  END IndexOf;
 
- PROCEDURE AddString* (l : TStringList; s : string) : LONGINT;
+ PROCEDURE AddString* (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
     VAR str : TString;
     i : LONGINT;
  BEGIN
     NEW(str);
-    COPY (s, str^.str); (*str^.str := s;*)
+    NEW(str.str, Strings.Length(s)+1);
+    COPY (s, str^.str^); (*str^.str^ := s;*)
     i := l.Add (l, str);
     RETURN i
  END AddString;
  
- PROCEDURE AppendString*(l : TStringList; s : string);
-    VAR str : TString;
+ PROCEDURE AppendString*(l : TStringList; s : ARRAY OF CHAR);
+ VAR
+   str : TString;
  BEGIN
     NEW(str);
-    COPY (s, str^.str); (*str^.str := s;*)
+    NEW(str.str, Strings.Length(s)+1);
+    COPY (s, str^.str^); (*str^.str^ := s;*)
     l.Append (l, str);
  END AppendString;
 
