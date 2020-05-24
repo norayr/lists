@@ -187,7 +187,7 @@ BEGIN
     END
 END ExtractWord;
 
-PROCEDURE tokenize*(s : string; ch : CHAR) : pstrings;
+PROCEDURE tokenize*(s : ARRAY OF CHAR; ch : CHAR) : pstrings;
 VAR 
   pstr  : pstring;
   pstrs : pstrings;

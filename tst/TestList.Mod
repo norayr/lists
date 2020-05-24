@@ -18,7 +18,7 @@ BEGIN
       IF e # NIL THEN Out.String (e.obj(StringList.TString).str^); Out.Ln END;
       (*Out.String (e.string); Out.Ln;*)
       INC(i);
-   UNTIL i = s.Count;
+   UNTIL i = s.Count - 1;
 END list;
 
 
