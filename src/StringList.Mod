@@ -103,7 +103,7 @@ BEGIN
       IF e # NIL THEN Out.String (e.obj(TString).str^); Out.Ln END;
       (*Out.String (e.string); Out.Ln;*)
       INC(i);
-   UNTIL i = s.Count - 1;
+   UNTIL i = s.Count;
 END DumpOut;
 
  PROCEDURE Dump*(l: TStringList; name: ARRAY OF CHAR);
