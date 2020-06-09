@@ -144,7 +144,7 @@ BEGIN
   RETURN(0);
 END Lpos;
 
-PROCEDURE string2pstring(s: ARRAY OF CHAR; VAR d : pstring);
+PROCEDURE string2pstring*(s: ARRAY OF CHAR; VAR d : pstring);
 BEGIN
   NEW(d, Strings.Length(s)+1);
   Assign (s, d^);
