@@ -126,7 +126,7 @@ END DumpOut;
        Files.WriteBytes(R, eol, 1);
      END;
      INC(i)
-   UNTIL i = l.Count - 1;
+   UNTIL i = l.Count;
    Files.Register(F);
  END Dump;
 
