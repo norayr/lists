@@ -26,7 +26,7 @@ TYPE
 	 IndexOf* : PROCEDURE (VAR l : TStringList; s : ARRAY OF CHAR) : LONGINT;
        AddString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
     AppendString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR);
-       Dump*      : PROCEDURE (l : TStringList; VAR name: ARRAY OF CHAR);
+       Dump*      : PROCEDURE (l : TStringList; name: ARRAY OF CHAR);
       END;
 
  PROCEDURE Copy*(VAR s, d: TString);
@@ -106,7 +106,7 @@ BEGIN
    UNTIL i = s.Count - 1;
 END DumpOut;
 
- PROCEDURE Dump*(l: TStringList; VAR name: ARRAY OF CHAR);
+ PROCEDURE Dump*(l: TStringList; name: ARRAY OF CHAR);
  VAR
    F : Files.File;
    R : Files.Rider;
