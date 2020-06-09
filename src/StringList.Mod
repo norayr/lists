@@ -122,7 +122,7 @@ END DumpOut;
    REPEAT
      e := l.Get(l, i);
      IF e # NIL THEN
-       Files.WriteBytes(R, e.obj(TString).str^, Strings.Length(e.obj(TString).str^) -1);
+       Files.WriteBytes(R, e.obj(TString).str^, Strings.Length(e.obj(TString).str^));
        Files.WriteBytes(R, eol, 1);
      END;
      INC(i)
