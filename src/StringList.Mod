@@ -1,6 +1,6 @@
 MODULE StringList;
 (* Oberon implementation without methods *)
-IMPORT Strings, S := lDefs, List, strutils;
+IMPORT Files, Out, Strings, S := lDefs, List, strutils;
 
 TYPE 
 
@@ -26,6 +26,7 @@ TYPE
 	 IndexOf* : PROCEDURE (VAR l : TStringList; s : ARRAY OF CHAR) : LONGINT;
        AddString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
     AppendString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR);
+       Dump*      : PROCEDURE (l : TStringList; VAR name: ARRAY OF CHAR);
       END;
 
  PROCEDURE Copy*(VAR s, d: TString);
@@ -91,6 +92,44 @@ TYPE
     l.Append (l, str);
  END AppendString;
 
+PROCEDURE DumpOut*(VAR s : TStringList);
+VAR e : Node;
+    i : INTEGER;
+BEGIN
+   NEW(e);
+   i := 0;
+   REPEAT
+      e := s.Get(s, i);
+      IF e # NIL THEN Out.String (e.obj(TString).str^); Out.Ln END;
+      (*Out.String (e.string); Out.Ln;*)
+      INC(i);
+   UNTIL i = s.Count - 1;
+END DumpOut;
+
+ PROCEDURE Dump*(l: TStringList; VAR name: ARRAY OF CHAR);
+ VAR
+   F : Files.File;
+   R : Files.Rider;
+   e : Node;
+   i : INTEGER;
+   eol: ARRAY 1 OF CHAR;
+ BEGIN
+   eol[0] := 0AX;
+   F := Files.New(name); 
+   Files.Set(R, F, 0);
+   NEW(e);
+   i := 0;
+   REPEAT
+     e := l.Get(l, i);
+     IF e # NIL THEN
+       Files.WriteBytes(R, e.obj(TString).str^, Strings.Length(e.obj(TString).str^) -1);
+       Files.WriteBytes(R, eol, 1);
+     END;
+     INC(i)
+   UNTIL i = l.Count - 1;
+   Files.Register(F);
+ END Dump;
+
  PROCEDURE Create* () : TStringList;
     VAR l : TStringList;
  BEGIN
@@ -101,6 +140,7 @@ TYPE
     l.Add     := List.Add;
     l.Append  := List.Append;
     l.AppendList  := List.AppendList;
+    l.Dump    := Dump;
     l.Clear   := List.Clear;
     l.Free    := List.Free;
     l.Insert  := List.Insert;
