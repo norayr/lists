@@ -74,11 +74,11 @@ TYPE
 
  PROCEDURE GetString*(l : TStringList; i: LONGINT ): pstring;
  VAR
-   e: StringList.Node;
+   e: Node;
    p: pstring;
  BEGIN
    e := l.Get(l, i);
-   p := e.obj(StringList.TString).str;
+   p := e.obj(TString).str;
    RETURN p
  END GetString;
 
