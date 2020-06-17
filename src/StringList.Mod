@@ -26,6 +26,7 @@ TYPE
 	 IndexOf* : PROCEDURE (VAR l : TStringList; s : ARRAY OF CHAR) : LONGINT;
        AddString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
     AppendString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR);
+       GetString* : PROCEDURE (l : TStringList; i: LONGINT): pstring;
        Dump*      : PROCEDURE (l : TStringList; name: ARRAY OF CHAR);
       END;
 
@@ -70,6 +71,16 @@ TYPE
      RETURN -1
    END
  END IndexOf;
+
+ PROCEDURE GetString*(l : TStringList; i: LONGINT ): pstring;
+ VAR
+   e: StringList.Node;
+   p: pstring;
+ BEGIN
+   e := l.Get(l, i);
+   p := e.obj(StringList.TString).str;
+   RETURN p
+ END GetString;
 
  PROCEDURE AddString* (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
     VAR str : TString;
@@ -150,6 +161,7 @@ END DumpOut;
     l.res     := TRUE;
   l.AddString := AddString;
 l.AppendString:= AppendString;
+  l.GetString := GetString;
     l.IndexOf := IndexOf;
     RETURN(l);
  END Create;
