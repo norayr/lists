@@ -6,16 +6,16 @@ all:
 		mkdir -p ../$(BLD)
 		cd $(BLD) && \
 		$(VOC) -s \
-		../lists/src/lDefs.Mod \
-		../lists/src/strutils.Mod \
-		../lists/src/List.Mod \
-		../lists/src/StringList.Mod
+		../deps/lists/src/lDefs.Mod \
+		../deps/lists/src/strutils.Mod \
+		../deps/lists/src/List.Mod \
+		../deps/lists/src/StringList.Mod
 
 tests: all
 		cd ../$(BLD) && \
-		$(VOC) ../lists/tst/TestList.Mod -m
+		$(VOC) ../deps/lists/tst/TestList.Mod -m
 		cd $(BLD) && \
-		$(VOC) ../lists/tst/TestStrutils.Mod -m
+		$(VOC) ../deps/lists/tst/TestStrutils.Mod -m
 		$(BLD)/TestStrutils
 		$(BLD)/TestList
 
