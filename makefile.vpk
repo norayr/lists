@@ -1,0 +1,23 @@
+VOC = /opt/voc/bin/voc
+BLD=build
+
+
+all:
+		mkdir -p ../$(BLD)
+		cd $(BLD) && \
+		$(VOC) -s \
+		../lists/src/lDefs.Mod \
+		../lists/src/strutils.Mod \
+		../lists/src/List.Mod \
+		../lists/src/StringList.Mod
+
+tests: all
+		cd ../$(BLD) && \
+		$(VOC) ../lists/tst/TestList.Mod -m
+		cd $(BLD) && \
+		$(VOC) ../lists/tst/TestStrutils.Mod -m
+		$(BLD)/TestStrutils
+		$(BLD)/TestList
+
+clean:
+		if [ -d "$(BLD)" ]; then rm -rf $(BLD); fi
