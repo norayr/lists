@@ -6,10 +6,10 @@ all:
 		mkdir -p ../../$(BLD)
 		cd ../../$(BLD) && \
 		$(VOC) -s \
-		../deps/lists/src/lDefs.Mod \
-		../deps/lists/src/strutils.Mod \
-		../deps/lists/src/List.Mod \
-		../deps/lists/src/StringList.Mod
+		../dps/lists/src/lDefs.Mod \
+		../dps/lists/src/strutils.Mod \
+		../dps/lists/src/List.Mod \
+		../dps/lists/src/StringList.Mod
 
 tests: all
 		cd ../../$(BLD) && \
