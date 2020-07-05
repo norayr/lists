@@ -3,8 +3,8 @@ BLD=build
 
 
 all:
-		mkdir -p ../$(BLD)
-		cd $(BLD) && \
+		mkdir -p ../../$(BLD)
+		cd ../../$(BLD) && \
 		$(VOC) -s \
 		../deps/lists/src/lDefs.Mod \
 		../deps/lists/src/strutils.Mod \
@@ -12,9 +12,9 @@ all:
 		../deps/lists/src/StringList.Mod
 
 tests: all
-		cd ../$(BLD) && \
+		cd ../../$(BLD) && \
 		$(VOC) ../deps/lists/tst/TestList.Mod -m
-		cd $(BLD) && \
+		cd ../../$(BLD) && \
 		$(VOC) ../deps/lists/tst/TestStrutils.Mod -m
 		$(BLD)/TestStrutils
 		$(BLD)/TestList
