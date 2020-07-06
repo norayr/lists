@@ -1,5 +1,5 @@
 MODULE strutils;
-IMPORT S := lDefs, Strings;
+IMPORT S := lDefs, Strings := oocStrings;
 
 CONST
   CR* = 0DX;
@@ -262,11 +262,6 @@ BEGIN
   dst[k-1] := 0X;
 END copyAll;
 
-BEGIN
-
-
-END strutils.
-
 (** fills whole array with zeroes, useful when one needs to get several strings which contain characters < ' ' and not necessarily end with 0X *)
 PROCEDURE zeroStr*(VAR str: ARRAY OF CHAR);
 VAR
@@ -468,4 +463,4 @@ END dumpTextTill0;
    END IntToStr;
 
 
-END stringHelpers.
+END strutils.
