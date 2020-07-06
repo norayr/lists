@@ -7,15 +7,15 @@ current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
 all:
 		mkdir -p $(BUILD)
-		cd $(BUILD) && $(VOC) -s \
+		cd $(BUILD) && voc -s \
 		$(mkfile_dir_path)/src/lDefs.Mod \
 		$(mkfile_dir_path)/src/strutils.Mod \
 		$(mkfile_dir_path)/src/List.Mod \
 		$(mkfile_dir_path)/src/StringList.Mod
 
 tests: all
-		$(VOC) $(mkfile_dir_path)/tst/TestList.Mod -m
-		$(VOC) $(mkfile_dir_path)/tst/TestStrutils.Mod -m
+		voc $(mkfile_dir_path)/tst/TestList.Mod -m
+		voc $(mkfile_dir_path)/tst/TestStrutils.Mod -m
 		$(BUILD)/TestStrutils
 		$(BUILD)/TestList
 
