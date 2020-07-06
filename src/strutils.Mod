@@ -1,5 +1,5 @@
 MODULE strutils;
-IMPORT S := lDefs, Strings := oocStrings;
+IMPORT S := lDefs, Strings := ooc2Strings;
 
 CONST
   CR* = 0DX;
