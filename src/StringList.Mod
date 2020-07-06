@@ -39,7 +39,7 @@ TYPE
    END
  END Copy;
 
- PROCEDURE TStringFromString*(VAR s: ARRAY OF CHAR; VAR d: TString);
+ PROCEDURE TStringFromString*(s: ARRAY OF CHAR; VAR d: TString);
  BEGIN
    NEW(d);
    NEW(d.str, Strings.Length(s)+1);
