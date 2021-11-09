@@ -166,7 +166,7 @@ BEGIN
   REPEAT
     IF text[i] = 0AX THEN INC(j) END;
     INC(i);
-  UNTIL (i = LEN(text)) OR (text[i] = 0X); (* now in j we have count of lines *)
+  UNTIL (i = LEN(text)) OR (text[i] = 0X); (* now in j we have number of lines *)
   (* and in i we have position of the end of the text *)
   NEW(pstrs, j); (*creating ptsrs array with that count *)
   lineNum := 0;         (* current line number, will inc until j*)
@@ -174,9 +174,12 @@ BEGIN
   REPEAT            (* now we have to fill it line by line *)
     WHILE (text[number] = 0AX) OR (text[number] = 0DX) DO INC(number) END;
     start := number;
+
     REPEAT
       INC(number)
-    UNTIL (number = LEN(text) - 1) OR (text[number] = 0AX) OR (text[number] = 0DX) OR (text[number] = 0X); (* reached eol *)
+    UNTIL (number = LEN(text) - 1) OR (text[number] = 0AX) 
+         OR (text[number] = 0DX) OR (text[number] = 0X); (* reached eol *)
+
     NEW(pstr, number - start + 1);
     Strings.Extract(text, start, number - start, pstr^);
     pstrs^[lineNum] := pstr;
@@ -334,14 +337,18 @@ END terminateLine;
 PROCEDURE getTillEOL*(VAR src: ARRAY OF CHAR; spos: INTEGER; VAR dst: ARRAY OF CHAR); (* actually get till any character < ' ' *)
 VAR
   i, j: INTEGER;
+  l, k: LONGINT;
 BEGIN
+  l := Strings.Length(src);
+  k := Strings.Length(dst);
+
   zeroStr(dst);
   i := 0;
   j := spos+1;
   REPEAT
     dst[i] := src[i+j];
     INC(i);
-  UNTIL (i+j = Strings.Length(src)) OR (src[i+j] < ' ');
+  UNTIL (i+j >= l) OR (src[i+j] < ' ') OR (i+j >= LEN(src)) OR (j >= LEN(dst)) OR (j >= k);
 END getTillEOL;
 
 (* get next word starting from spos till the ' ' *)
