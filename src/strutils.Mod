@@ -358,7 +358,7 @@ BEGIN
                Out.String("src[i+j]="); Out.Char(src[i+j]); Out.Ln;
     dst[i] := src[i+j];
     INC(i);
-  UNTIL (i+j >= l) OR (src[i+j] < ' ') OR (i+j >= LEN(src)) OR (j >= LEN(dst)) OR (j >= k);
+  UNTIL (i+j >= l) OR (src[i+j] < ' ') OR (i+j >= LEN(src)) OR (j >= LEN(dst));
                Out.String("Until passed"); Out.Ln;
 END getTillEOL;
 
