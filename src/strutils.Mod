@@ -343,6 +343,11 @@ BEGIN
   k := Strings.Length(dst);
         Out.String("getTillEOL"); Out.Ln;
         Out.String(src); Out.Ln;
+        Out.String("spos="); Out.Int(spos, 0); Out.Ln;
+        Out.String("l="); Out.Int(l, 0); Out.Ln;
+        Out.String("k="); Out.Int(k, 0); Out.Ln;
+        Out.String("LEN(src)="); Out.Int(LEN(src, 0); Out.Ln;
+        Out.String("LEN(dst)="); Out.Int(LEN(dst, 0); Out.Ln;
   zeroStr(dst);
   i := 0;
   j := spos+1;
