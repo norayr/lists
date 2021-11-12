@@ -341,14 +341,20 @@ VAR
 BEGIN
   l := Strings.Length(src);
   k := Strings.Length(dst);
-
+        Out.String("getTillEOL"); Out.Ln;
+        Out.String(src); Out.Ln;
   zeroStr(dst);
   i := 0;
   j := spos+1;
   REPEAT
+               Out.String("i="); Out.Int(i, 0); Out.Ln;
+               Out.String("j="); Out.Int(j, 0); Out.Ln;
+               Out.String("i+j="); Out.Int(i+j, 0); Out.Ln;
+               Out.String("src[i+j]="); Out.Char(src[i+j]); Out.Ln;
     dst[i] := src[i+j];
     INC(i);
   UNTIL (i+j >= l) OR (src[i+j] < ' ') OR (i+j >= LEN(src)) OR (j >= LEN(dst)) OR (j >= k);
+               Out.String("Until passed"); Out.Ln;
 END getTillEOL;
 
 (* get next word starting from spos till the ' ' *)
