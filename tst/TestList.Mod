@@ -8,17 +8,8 @@ VAR
   L0 : StringList.TList;
 
 PROCEDURE list(VAR s : StringList.TStringList);
-VAR e : StringList.Node;
-    i : INTEGER;
 BEGIN
-   NEW(e);
-   i := 0;
-   REPEAT
-      e := s.Get(s, i);
-      IF e # NIL THEN Out.String (e.obj(StringList.TString).str^); Out.Ln END;
-      (*Out.String (e.string); Out.Ln;*)
-      INC(i);
-   UNTIL i = s.Count - 1;
+  StringList.list(s)
 END list;
 
 
