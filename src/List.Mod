@@ -44,6 +44,7 @@ First*, Last* : Node;
        l.Last.next := e;
     END;
     l.Last := e;
+    l.Last.next := NIL;
     INC(l.Count);           
     l.res := TRUE;
     RETURN (l.Count - 1);
