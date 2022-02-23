@@ -39,6 +39,15 @@ TYPE
    END
  END Copy;
 
+ PROCEDURE pstringFromString*(s: ARRAY OF CHAR; VAR p: pstring);
+ VAR
+   l: LONGINT;
+ BEGIN
+   l := Strings.Length(s)+1;
+   NEW(p, l);
+   COPY(s, p^);
+ END pstringFromString;
+
  PROCEDURE TStringFromString*(s: ARRAY OF CHAR; VAR d: TString);
  BEGIN
    NEW(d);
