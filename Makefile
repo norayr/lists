@@ -14,8 +14,8 @@ test:
 		echo Run make, first; \
 		exit 1;               \
 	fi
-	@cd build; voc ${.CURDIR}/tst/TestList.Mod -m               \
-		       ${.CURDIR}/tst/TestStrutils.Mod -m           \
+	@cd build; voc ${.CURDIR}/tests/TestList.Mod -m               \
+		       ${.CURDIR}/tests/TestStrutils.Mod -m           \
 		       > /dev/null 2>&1                               \
 		       || (echo Failed to compile, have you run make? \
 		           && exit 1)
