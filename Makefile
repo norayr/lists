@@ -1,21 +1,23 @@
 .POSIX:
 
+ROOTDIR  = $$PWD
+
 all:
 	@if [ ! -d build ]; then \
 		mkdir build;     \
 	fi
-	@cd build; voc -s ${.CURDIR}/src/lDefs.Mod      \
-			  ${.CURDIR}/src/strutils.Mod   \
-			  ${.CURDIR}/src/List.Mod       \
-			  ${.CURDIR}/src/StringList.Mod
+	@cd build; voc -s ${ROOTDIR}/../src/lDefs.Mod      \
+			  ${ROOTDIR}/../src/strutils.Mod   \
+			  ${ROOTDIR}/../src/List.Mod       \
+			  ${ROOTDIR}/../src/StringList.Mod
 
 test:
 	@if [ ! -d build ]; then      \
 		echo Run make, first; \
 		exit 1;               \
 	fi
-	@cd build; voc ${.CURDIR}/tests/TestList.Mod -m               \
-		       ${.CURDIR}/tests/TestStrutils.Mod -m           \
+	@cd build; voc ${ROOTDIR}/../tests/TestList.Mod -m            \
+		       ${ROOTDIR}/../tests/TestStrutils.Mod -m        \
 		       > /dev/null 2>&1                               \
 		       || (echo Failed to compile, have you run make? \
 		           && exit 1)
