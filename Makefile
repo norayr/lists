@@ -21,12 +21,14 @@ test:
 		       > /dev/null 2>&1                               \
 		       || (echo Failed to compile, have you run make? \
 		           && exit 1)
-	@./build/TestStrutils                \
-		&& echo TestStrutils: passed \
-		|| echo TestStrutils: failed
-	@./build/TestList                \
-		&& echo TestList: passed \
-		|| echo TestList: failed
+	@./build/TestStrutils                                 \
+		> /dev/null 2>81                              \
+		&& echo ${ROOTDIR}/build/TestStrutils: passed \
+		|| echo ${ROOTDIR}/buildTestStrutils: failed
+	@./build/TestList                                 \
+		> /dev/null 2>&1                          \
+		&& echo ${ROOTDIR}/build/TestList: passed \
+		|| echo ${ROOTDIR}/build/TestList: failed
 
 clean:
 	rm -rf build
