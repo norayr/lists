@@ -6,8 +6,8 @@ TYPE
 
       TObject* = S.TObject;
   TObjectDesc* = S.TObjectDesc;
-       pstring* = POINTER TO ARRAY OF CHAR;
-       pstrings* = POINTER TO ARRAY OF pstring;
+       pstring* = S.pstring;
+       pstrings* = S.pstrings;
    
   TString* = POINTER TO TStringDesc;
   

@@ -6,9 +6,9 @@ CONST
   LF* = 0AX;
 
  TYPE string* = S.string;
-      strings* = POINTER TO ARRAY OF string;
-      pstring* = POINTER TO ARRAY OF CHAR;
-      pstrings*= POINTER TO ARRAY OF pstring;
+      strings* = S.strings;
+      pstring* = S.pstring;
+      pstrings*= S.pstrings;
 (* from the oo2c Strings module, implements string comparison, which should be implemented in a library level in case of Oberon-1 *)
 TYPE  CompareResults* = SHORTINT;
   (**Result type of @oproc{Compare}.  *)
