@@ -482,9 +482,11 @@ END dumpTextTill0;
 PROCEDURE dumpChars*(VAR s : ARRAY OF CHAR);
 VAR
   i : INTEGER;
+  l : LONGINT;
 BEGIN
   i := 0;
-  WHILE s[i] # Ascii.nul DO
+  l := LEN(s);
+  WHILE i < l-1 DO
     Out.Int(i, 0); Out.Char(" "); Out.Char(s[i]); Out.Ln; INC(i)
   END
 END dumpChars;
