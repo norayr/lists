@@ -1,5 +1,5 @@
 MODULE strutils;
-IMPORT S := lDefs, Strings := ooc2Strings, Out;
+IMPORT Ascii := oocAscii, S := lDefs, Strings := ooc2Strings, Out;
 
 CONST
   CR* = 0DX;
@@ -23,6 +23,16 @@ CONST
   greater* = 1;
   (**Result of @oproc{Compare} if the first argument is lexically greater
      than the second one.  *)
+
+PROCEDURE dumpChars*(VAR s : ARRAY OF CHAR);
+VAR
+  i : INTEGER;
+BEGIN
+  i := 0;
+  WHILE s[i] # Ascii.nul DO
+    Out.Int(i, 0); Out.Char(" "); Out.Char(s[i]); Out.Ln; INC(i)
+  END
+END dumpChars;
 
 (* this function copied from ooc source and may be considered a duplicate. *)
  PROCEDURE Compare* (stringVal1, stringVal2: ARRAY OF CHAR): CompareResults;

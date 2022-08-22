@@ -25,6 +25,12 @@ VAR
   ch: CHAR;
   i : INTEGER;
 BEGIN
+  s0 := "manush";
+  IF strutils.contains(s0, "manush") THEN
+    Out.String("contains!"); Out.Ln;
+  ELSE
+    Out.String("doesn't contain."); Out.Ln;
+  END;
   s0 := "aoeu,htns";
   ch := ",";
   i  := 2;
