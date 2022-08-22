@@ -479,7 +479,7 @@ END dumpTextTill0;
        COPY(b, str) (* truncate output if necessary *)
    END IntToStr;
 
-PROCEDURE dumpChars(VAR s : ARRAY OF CHAR);
+PROCEDURE dumpChars*(VAR s : ARRAY OF CHAR);
 VAR
   i : INTEGER;
 BEGIN
