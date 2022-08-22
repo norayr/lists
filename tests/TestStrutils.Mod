@@ -31,6 +31,7 @@ BEGIN
   ELSE
     Out.String("doesn't contain."); Out.Ln;
   END;
+  strutils.dumpChars(s0); Out.Ln;
   s0 := "aoeu,htns";
   ch := ",";
   i  := 2;
