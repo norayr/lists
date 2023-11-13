@@ -20,12 +20,12 @@ build_deps:
 	make -f $(mkfile_dir_path)/$(DPD)/strutils/GNUmakefile BUILD=$(BLD)
 
 buildLists:
-	cd $(BUILD) && $(VOC) -s $(mkfile_dir_path)/src/List.Mod
-	cd $(BUILD) && $(VOC) -s $(mkfile_dir_path)/src/StringList.Mod
+	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/List.Mod
+	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/StringList.Mod
 
 tests:
-	cd $(BUILD) && $(VOC) $(mkfile_dir_path)/test/testList.Mod -m
+	cd $(BLD) && $(VOC) $(mkfile_dir_path)/test/testList.Mod -m
 	build/testList
 
 clean:
-	if [ -d "$(BUILD)" ]; then rm -rf $(BLD); fi
+	if [ -d "$(BLD)" ]; then rm -rf $(BLD); fi
