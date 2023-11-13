@@ -1,4 +1,4 @@
-MODULE TestList;
+MODULE testList;
 IMPORT Texts, StringList, Oberon;
 
 VAR
@@ -149,4 +149,4 @@ BEGIN
    IF errCount > 0 THEN successful := FALSE END;
    ASSERT(successful);
 
-END TestList.
+END testList.

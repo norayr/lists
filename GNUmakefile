@@ -21,7 +21,10 @@ build_deps:
 buildLists:
 	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/List.Mod
 	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/StringList.Mod
+
+tests:
 	cd $(BLD) && $(VOC) $(mkfile_dir_path)/test/testList.Mod -m
+	build/testList
 
 clean:
 	if [ -d "$(BLD)" ]; then rm -rf $(BLD); fi
