@@ -1,12 +1,12 @@
 MODULE List;
 (* Oberon implementation without methods *)
-IMPORT S := lDefs;
 
 TYPE
-     TObject* = S.TObject;
-     TObjectDesc* = S.TObjectDesc;
-        Node* = POINTER TO NodeDesc;
+     TObject* = POINTER TO TObjectDesc;
+ TObjectDesc* = RECORD
+   END;
 
+        Node* = POINTER TO NodeDesc;
     NodeDesc* = RECORD
          obj* : TObject;
         next* : Node;
@@ -15,7 +15,7 @@ TYPE
 
        TList* = POINTER TO TListDesc;
 
-   TListDesc* = RECORD (S.TObjectDesc)
+   TListDesc* = RECORD (TObjectDesc)
       Create* : PROCEDURE () : TList;
         Free* : PROCEDURE (l : TList);
        Clear* : PROCEDURE (l : TList);

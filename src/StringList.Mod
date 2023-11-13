@@ -1,17 +1,17 @@
 MODULE StringList;
 (* Oberon implementation without methods *)
-IMPORT Files, Out, Strings, S := lDefs, List, strutils;
+IMPORT Files, Out, Strings, List, strTypes, strUtils;
 
 TYPE
 
-      TObject* = S.TObject;
-  TObjectDesc* = S.TObjectDesc;
-       pstring* = S.pstring;
-       pstrings* = S.pstrings;
+      TObject* = List.TObject;
+  TObjectDesc* = List.TObjectDesc;
+       pstring* = strTypes.pstring;
+       pstrings* = strTypes.pstrings;
 
   TString* = POINTER TO TStringDesc;
 
-  TStringDesc =RECORD (S.TObjectDesc)
+  TStringDesc =RECORD (TObjectDesc)
       str* : pstring
   END;
 
@@ -67,7 +67,7 @@ TYPE
    i := 0;
 
    REPEAT
-     IF strutils.Compare (s, e.obj(TString).str^) = strutils.equal THEN
+     IF strUtils.Compare (s, e.obj(TString).str^) = strUtils.equal THEN
        found := TRUE;
      ELSE
        e := e.next;

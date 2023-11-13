@@ -1,23 +1,27 @@
 VOC = /opt/voc/bin/voc
-BUILD=build
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir_path := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+build_dir_path := $(mkfile_dir_path)/build
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+BLD := $(mkfile_dir_path)/build
+DPD  =  deps
+DPS := $(mkfile_dir_path)/$(DPD)
 
+all: get_deps build_deps buildLists
 
-all:
-		mkdir -p $(BUILD)
-		cd $(BUILD) && $(VOC) -s \
-		$(mkfile_dir_path)/src/lDefs.Mod \
-		$(mkfile_dir_path)/src/strutils.Mod \
-		$(mkfile_dir_path)/src/List.Mod \
-		$(mkfile_dir_path)/src/StringList.Mod
+get_deps:
+	mkdir -p $(DPS)
+	if [ -d $(DPS)/strutils ]; then cd $(DPS)/strutils; git pull; cd -; else cd $(DPS); git clone https://github.com/norayr/strutils; cd -; fi
 
-tests: all
-		$(VOC) $(mkfile_dir_path)/tst/TestList.Mod -m
-		$(VOC) $(mkfile_dir_path)/tst/TestStrutils.Mod -m
-		$(BUILD)/TestStrutils
-		$(BUILD)/TestList
+build_deps:
+	mkdir -p $(mkfile_dir_path)
+	cd $(CURDIR)/$(BUILD)
+	make -f $(mkfile_dir_path)/$(DPD)/strutils/GNUmakefile BUILD=$(BLD)
+
+buildLists:
+	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/List.Mod
+	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/StringList.Mod
+	cd $(BLD) && $(VOC) $(mkfile_dir_path)/test/testList.Mod -m
 
 clean:
-		if [ -d "$(BUILD)" ]; then rm -rf $(BUILD); fi
+	if [ -d "$(BLD)" ]; then rm -rf $(BLD); fi
