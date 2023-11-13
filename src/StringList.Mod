@@ -2,19 +2,19 @@ MODULE StringList;
 (* Oberon implementation without methods *)
 IMPORT Files, Out, Strings, S := lDefs, List, strutils;
 
-TYPE 
+TYPE
 
       TObject* = S.TObject;
   TObjectDesc* = S.TObjectDesc;
        pstring* = S.pstring;
        pstrings* = S.pstrings;
-   
+
   TString* = POINTER TO TStringDesc;
-  
+
   TStringDesc =RECORD (S.TObjectDesc)
       str* : pstring
   END;
-   
+
      Node* = List.Node;
  NodeDesc* = List.NodeDesc;
 
@@ -23,7 +23,7 @@ TYPE
       TStringList* = POINTER TO TStringListDesc;
 
       TStringListDesc* = RECORD (List.TListDesc)
-	 IndexOf* : PROCEDURE (VAR l : TStringList; s : ARRAY OF CHAR) : LONGINT;
+   IndexOf* : PROCEDURE (VAR l : TStringList; s : ARRAY OF CHAR) : LONGINT;
        AddString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
     AppendString* : PROCEDURE (l : TStringList; s : ARRAY OF CHAR);
        GetString* : PROCEDURE (l : TStringList; i: LONGINT): pstring;
@@ -65,12 +65,12 @@ TYPE
    NEW(e);
    e := l.First;
    i := 0;
-    
+
    REPEAT
      IF strutils.Compare (s, e.obj(TString).str^) = strutils.equal THEN
-       found := TRUE;	  
+       found := TRUE;
      ELSE
-       e := e.next;       
+       e := e.next;
        INC(i);
      END;
    UNTIL found OR (i = l.Count);
@@ -101,7 +101,7 @@ TYPE
     i := l.Add (l, str);
     RETURN i
  END AddString;
- 
+
  PROCEDURE AppendString*(l : TStringList; s : ARRAY OF CHAR);
  VAR
    str : TString;
@@ -135,7 +135,7 @@ END DumpOut;
    eol: ARRAY 1 OF CHAR;
  BEGIN
    eol[0] := 0AX;
-   F := Files.New(name); 
+   F := Files.New(name);
    Files.Set(R, F, 0);
    NEW(e);
    i := 0;
@@ -200,7 +200,7 @@ BEGIN
       IF e # NIL THEN Out.String (e.obj(TString).str^); Out.Ln END;
       (*Out.String (e.string); Out.Ln;*)
       INC(i);
-   UNTIL i = s.Count;
+   UNTIL i = s.Count-1;
 END list;
 
 

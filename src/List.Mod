@@ -10,6 +10,7 @@ TYPE
     NodeDesc* = RECORD
          obj* : TObject;
         next* : Node;
+        prev* : Node;
     END;
 
        TList* = POINTER TO TListDesc;
@@ -40,7 +41,9 @@ First*, Last* : Node;
     e.next := NIL;
     IF l.First = NIL THEN
        l.First := e;
+       e.prev  := NIL
     ELSE
+       e.prev := l.Last;
        l.Last.next := e;
     END;
     l.Last := e;
@@ -59,7 +62,9 @@ First*, Last* : Node;
     e.next := NIL;
     IF l.First = NIL THEN
        l.First := e;
+       e.prev  := NIL;
     ELSE
+       e.prev := l.Last;
        l.Last.next := e;
     END;
     l.Last := e;
@@ -98,6 +103,7 @@ First*, Last* : Node;
     NEW(u); NEW(p);
     IF i = 0 THEN
        e.next := l.First;
+       e.prev := NIL;
        l.First := e;
     ELSE
        j := 0;
@@ -107,6 +113,7 @@ First*, Last* : Node;
           u := u.next;
           INC(j);
        END;
+       e.prev := p;
        p.next := e;
        e.next := u;
     END;
