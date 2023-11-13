@@ -15,7 +15,7 @@ get_deps:
 
 build_deps:
 	mkdir -p $(mkfile_dir_path)
-	cd $(CURDIR)/$(BUILD)
+	cd $(BUILD)
 	make -f $(mkfile_dir_path)/$(DPD)/strutils/GNUmakefile BUILD=$(BLD)
 
 buildLists:
