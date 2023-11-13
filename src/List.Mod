@@ -38,6 +38,7 @@ First*, Last* : Node;
     l.res := FALSE;
     NEW(e);
     e.obj := s;
+    e.prev := NIL;
     e.next := NIL;
     IF l.First = NIL THEN
        l.First := e;
@@ -59,6 +60,7 @@ First*, Last* : Node;
     l.res := FALSE;
     NEW(e);
     e.obj := s;
+    e.prev := NIL;
     e.next := NIL;
     IF l.First = NIL THEN
        l.First := e;
