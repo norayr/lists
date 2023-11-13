@@ -30,7 +30,7 @@ ${DEPS}:
 		else                                    \
 			printf "Fetching %s: " $${i#*/};      \
 			git clone ${GITHUB}$$i deps/$${i#*/}  \
-			/dev/null 2>&1                        \
+			> /dev/null 2>&1                      \
 			&& echo done                          \
 			|| (echo failed && exit 1);           \
 		fi                                      \
@@ -44,7 +44,7 @@ tests:
 	@cd build && voc ${ROOTDIR}/../test/testList.Mod -m \
 			> /dev/null 2>&1                                \
 			|| (echo Failed to compile, have you run make?  \
-				&& exit 1)
+			&& exit 1)
 	@./build/testList                                   \
 		> /dev/null 2>&1                                  \
 		&& echo ${ROOTDIR}/build/testList: passed         \
