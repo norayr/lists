@@ -3,6 +3,7 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir_path := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 build_dir_path := $(mkfile_dir_path)/build
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+BUILD="build"
 BLD := $(mkfile_dir_path)/build
 DPD  =  deps
 DPS := $(mkfile_dir_path)/$(DPD)
@@ -14,7 +15,7 @@ get_deps:
 	if [ -d $(DPS)/strutils ]; then cd $(DPS)/strutils; git pull; cd -; else cd $(DPS); git clone https://github.com/norayr/strutils; cd -; fi
 
 build_deps:
-	mkdir -p $(mkfile_dir_path)
+	mkdir -p $(BUILD)
 	cd $(BUILD)
 	make -f $(mkfile_dir_path)/$(DPD)/strutils/GNUmakefile BUILD=$(BLD)
 
