@@ -1,9 +1,9 @@
 VOC = /opt/voc/bin/voc
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir_path := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-build_dir_path := $(mkfile_dir_path)/build
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 BUILD="build"
+build_dir_path := $(mkfile_dir_path)/$(BUILD)
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 BLD := $(mkfile_dir_path)/build
 DPD  =  deps
 DPS := $(mkfile_dir_path)/$(DPD)
@@ -20,12 +20,12 @@ build_deps:
 	make -f $(mkfile_dir_path)/$(DPD)/strutils/GNUmakefile BUILD=$(BLD)
 
 buildLists:
-	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/List.Mod
-	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/StringList.Mod
+	cd $(BUILD) && $(VOC) -s $(mkfile_dir_path)/src/List.Mod
+	cd $(BUILD) && $(VOC) -s $(mkfile_dir_path)/src/StringList.Mod
 
 tests:
-	cd $(BLD) && $(VOC) $(mkfile_dir_path)/test/testList.Mod -m
+	cd $(BUILD) && $(VOC) $(mkfile_dir_path)/test/testList.Mod -m
 	build/testList
 
 clean:
-	if [ -d "$(BLD)" ]; then rm -rf $(BLD); fi
+	if [ -d "$(BUILD)" ]; then rm -rf $(BLD); fi
