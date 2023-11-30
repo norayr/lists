@@ -165,6 +165,7 @@ END DumpOut;
     l.Free    := List.Free;
     l.Insert  := List.Insert;
     l.Delete  := List.Delete;
+l.DeleteNode  := List.DeleteNode;
     l.Empty   := List.Empty;
     l.Get     := List.Get;
     l.res     := TRUE;
