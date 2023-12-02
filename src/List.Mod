@@ -24,6 +24,7 @@ TYPE
   AppendList* : PROCEDURE (src, dst : TList);
       Insert* : PROCEDURE (l : TList; i : LONGINT; s : TObject);
       Delete* : PROCEDURE (l : TList; i : LONGINT);
+  DeleteNode* : PROCEDURE (l : TList; n : Node): BOOLEAN;
        Empty* : PROCEDURE (l : TList) : BOOLEAN;
          Get* : PROCEDURE (l : TList; k : LONGINT) : Node;
 First*, Last* : Node;
@@ -180,6 +181,33 @@ First*, Last* : Node;
     END;
  END Delete;
 
+PROCEDURE DeleteNode*(l: TList; n: Node):BOOLEAN;
+VAR
+	current: Node;
+	result: BOOLEAN;
+BEGIN
+    result := FALSE;
+	current := l.First;
+	REPEAT
+         IF current = n THEN
+               IF current.prev = NIL THEN
+                  l.First := current.next
+               ELSE
+                  current.prev.next := current.next
+               END;
+               IF current.next = NIL THEN
+                  l.Last := current.prev
+               ELSE
+                  current.next.prev := current.prev
+               END;
+               DEC(l.Count);
+               result := TRUE;
+         END;
+      current := current.next
+    UNTIL result OR (current = NIL);
+      RETURN result;
+END DeleteNode;
+
 PROCEDURE Empty* (l : TList) : BOOLEAN;
  BEGIN
     RETURN l.First = NIL
@@ -199,6 +227,7 @@ PROCEDURE Empty* (l : TList) : BOOLEAN;
     l.Free    := Free;
     l.Insert  := Insert;
     l.Delete  := Delete;
+l.DeleteNode  := DeleteNode;
     l.Empty   := Empty;
     l.Get     := Get;
     l.res     := TRUE;

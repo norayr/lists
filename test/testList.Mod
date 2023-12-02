@@ -2,17 +2,18 @@ MODULE testList;
 IMPORT Texts, StringList, Oberon;
 
 VAR
-  errCount   : LONGINT;
-  L0         : StringList.TList;
-  l          : LONGINT;
-  passCount  : LONGINT;
-  strs       : StringList.TStringList;
-  str        : StringList.TString;
-  success    : REAL;
-  tres       : StringList.pstring;
-  totalCount : LONGINT;
-  successful : BOOLEAN;
-  W          : Texts.Writer;
+    errCount   : LONGINT;
+    L0         : StringList.TList;
+    l          : LONGINT;
+    n          : StringList.Node;
+    passCount  : LONGINT;
+    strs       : StringList.TStringList;
+    str        : StringList.TString;
+    success    : REAL;
+    tres       : StringList.pstring;
+    totalCount : LONGINT;
+ b, successful : BOOLEAN;
+    W          : Texts.Writer;
 
 PROCEDURE list(VAR s : StringList.TStringList);
 BEGIN
@@ -124,6 +125,36 @@ BEGIN
       Texts.WriteString(W, " (failed)"); Texts.WriteLn(W);
       INC(errCount);
    END;
+
+
+
+
+
+   Texts.WriteLn(W);
+   Texts.WriteString(W, "-------------------------------"); Texts.WriteLn(W);
+   list(strs);
+   Texts.WriteString(W, "-- Removing the First Element  --"); Texts.WriteLn(W);
+   n := strs.Get(L0, 0);
+   b := strs.DeleteNode(L0,n);
+    
+   Texts.WriteLn(W);
+
+   Texts.WriteString(W, "-------------------------------"); Texts.WriteLn(W);
+   list(strs);
+   Texts.WriteString(W, "-------------------------------"); Texts.WriteLn(W);
+   tres := strs.GetString(strs, 0);
+   (*Texts.WriteString(W, "[TEST #6] Get the Element at Index 0: Expected 006, Found "); Texts.WriteString(W, tres^);
+   IF tres^ = "006" THEN
+      Texts.WriteString(W, " (passed)"); Texts.WriteLn(W);
+      INC(passCount);
+   ELSE
+      Texts.WriteString(W, " (failed)"); Texts.WriteLn(W);
+      INC(errCount);
+   END;
+   *)
+
+
+
 
    Texts.WriteLn(W);
    totalCount := errCount + passCount;
