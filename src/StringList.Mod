@@ -55,31 +55,31 @@ TYPE
    COPY(s, d.str^)
  END TStringFromString;
 
- PROCEDURE IndexOf*(VAR l : TStringList; s : ARRAY OF CHAR): LONGINT;
- VAR
-   i : LONGINT;
-   found : BOOLEAN;
-   e : Node;
- BEGIN
-   found := FALSE;
-   NEW(e);
-   e := l.First;
-   i := 0;
+PROCEDURE IndexOf*(VAR l: TStringList; s: ARRAY OF CHAR): LONGINT;
+VAR
+  i: LONGINT;
+  found: BOOLEAN;
+  e: Node;
+BEGIN
+  found := FALSE;
+  e := l.First;  (* Initialize with the first node *)
+  i := 0;
 
-   REPEAT
-     IF strUtils.Compare (s, e.obj(TString).str^) = strUtils.equal THEN
-       found := TRUE;
-     ELSE
-       e := e.next;
-       INC(i);
-     END;
-   UNTIL found OR (i = l.Count);
-   IF found THEN
-     RETURN i
-   ELSE
-     RETURN -1
-   END
- END IndexOf;
+  WHILE (e # NIL) & (i < l.Count) & ~found DO
+    IF (e.obj # NIL) & (strUtils.Compare(s, e.obj(TString).str^) = strUtils.equal) THEN
+      found := TRUE;
+    ELSE
+      e := e.next;
+      INC(i);
+    END;
+  END;
+
+  IF found THEN
+    RETURN i
+  ELSE
+    RETURN -1
+  END;
+END IndexOf;
 
  PROCEDURE GetString*(l : TStringList; i: LONGINT ): pstring;
  VAR
