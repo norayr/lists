@@ -60,26 +60,84 @@ VAR
   i: LONGINT;
   found: BOOLEAN;
   e: Node;
+  tagStr: pstring;
 BEGIN
   found := FALSE;
-  e := l.First;  (* Initialize with the first node *)
+  e := l.First;
   i := 0;
 
   WHILE (e # NIL) & (i < l.Count) & ~found DO
-    IF (e.obj # NIL) & (strUtils.Compare(s, e.obj(TString).str^) = strUtils.equal) THEN
-      found := TRUE;
+    IF e.obj # NIL THEN
+      tagStr := e.obj(TString).str;
+
+      (* Debugging output to see the comparison process *)
+      Out.String("Traversing node ["); Out.Int(i, 0); Out.String("]: '");
+      Out.String(tagStr^);
+      Out.String("'. Comparing with '"); Out.String(s); Out.String("': ");
+
+      IF strUtils.Compare(tagStr^, s) = strUtils.equal THEN
+        Out.String("Equal"); Out.Ln;
+        found := TRUE;
+      ELSE
+        Out.String("Not Equal"); Out.Ln;
+      END;
     ELSE
-      e := e.next;
-      INC(i);
+      Out.String("Node object is NIL, skipping comparison."); Out.Ln;
     END;
+
+    e := e.next;
+    INC(i);
   END;
 
   IF found THEN
-    RETURN i
+    Out.String("IndexOf returned index: "); Out.Int(i-1, 0); Out.Ln;  (* Adjust to return 0-based index *)
+    RETURN i-1;
   ELSE
-    RETURN -1
+    RETURN -1;
   END;
 END IndexOf;
+
+PROCEDURE DeleteNode*(l: TList; n: Node): BOOLEAN;
+VAR
+  current: Node;
+  result: BOOLEAN;
+BEGIN
+  result := FALSE;
+  current := l.First;
+
+  WHILE current # NIL DO
+    IF current = n THEN
+      (* Debugging: Print node to be removed *)
+      Out.String("Deleting node: '");
+      IF current.obj # NIL THEN
+        Out.String(current.obj(TString).str^);
+      ELSE
+        Out.String("NIL node");
+      END;
+      Out.String("'"); Out.Ln;
+
+      (* Adjust pointers to remove the node *)
+      IF current.prev = NIL THEN
+        l.First := current.next;  (* Handle first node case *)
+      ELSE
+        current.prev.next := current.next;
+      END;
+
+      IF current.next = NIL THEN
+        l.Last := current.prev;  (* Handle last node case *)
+      ELSE
+        current.next.prev := current.prev;
+      END;
+
+      DEC(l.Count);  (* Decrement the count after deletion *)
+      result := TRUE;
+      RETURN result;
+    END;
+    current := current.next;
+  END;
+
+  RETURN result;  (* Return FALSE if no node was found/deleted *)
+END DeleteNode;
 
  PROCEDURE GetString*(l : TStringList; i: LONGINT ): pstring;
  VAR
@@ -91,15 +149,21 @@ END IndexOf;
    RETURN p
  END GetString;
 
- PROCEDURE AddString* (l : TStringList; s : ARRAY OF CHAR) : LONGINT;
-    VAR str : TString;
-    i : LONGINT;
+ PROCEDURE AddString*(l: TStringList; s: ARRAY OF CHAR): LONGINT;
+ VAR
+   str: TString;
+   i: LONGINT;
  BEGIN
-    NEW(str);
-    NEW(str.str, Strings.Length(s)+1);
-    COPY (s, str^.str^); (*str^.str^ := s;*)
-    i := l.Add (l, str);
-    RETURN i
+   NEW(str);
+   NEW(str.str, Strings.Length(s)+1);
+   COPY(s, str^.str^);
+
+   i := l.Add(l, str);  (* Add the tag as a new node in the list *)
+
+   (* Debugging: Output the added string and the list node info *)
+   Out.String("Added string to TStringList: '"); Out.String(s); Out.String("' at index "); Out.Int(i, 0); Out.Ln;
+
+   RETURN i;
  END AddString;
 
  PROCEDURE AppendString*(l : TStringList; s : ARRAY OF CHAR);
@@ -165,7 +229,7 @@ END DumpOut;
     l.Free    := List.Free;
     l.Insert  := List.Insert;
     l.Delete  := List.Delete;
-l.DeleteNode  := List.DeleteNode;
+l.DeleteNode  := DeleteNode;
     l.Empty   := List.Empty;
     l.Get     := List.Get;
     l.res     := TRUE;

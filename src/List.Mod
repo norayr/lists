@@ -1,6 +1,6 @@
 MODULE List;
 (* Oberon implementation without methods *)
-
+IMPORT Out;
 TYPE
      TObject* = POINTER TO TObjectDesc;
  TObjectDesc* = RECORD
@@ -180,32 +180,82 @@ First*, Last* : Node;
        l.res := TRUE;
     END;
  END Delete;
-
-PROCEDURE DeleteNode*(l: TList; n: Node):BOOLEAN;
+(* same as next but with debug messages 
+PROCEDURE DeleteNode*(l: TList; n: Node): BOOLEAN;
 VAR
-	current: Node;
-	result: BOOLEAN;
+  current: Node;
+  result: BOOLEAN;
 BEGIN
-    result := FALSE;
-	current := l.First;
-	REPEAT
-         IF current = n THEN
-               IF current.prev = NIL THEN
-                  l.First := current.next
-               ELSE
-                  current.prev.next := current.next
-               END;
-               IF current.next = NIL THEN
-                  l.Last := current.prev
-               ELSE
-                  current.next.prev := current.prev
-               END;
-               DEC(l.Count);
-               result := TRUE;
-         END;
-      current := current.next
-    UNTIL result OR (current = NIL);
+  result := FALSE;
+  current := l.First;
+
+  WHILE current # NIL DO
+    IF current = n THEN
+      (* Debugging: Print node to be removed *)
+      Out.String("Deleting node: ");
+      IF current.obj # NIL THEN
+        Out.String("Node found and deleted.");
+      ELSE
+        Out.String("NIL node");
+      END;
+      Out.Ln;
+
+      (* Adjust pointers to remove the node *)
+      IF current.prev = NIL THEN
+        l.First := current.next;  (* Handle first node case *)
+      ELSE
+        current.prev.next := current.next;
+      END;
+
+      IF current.next = NIL THEN
+        l.Last := current.prev;  (* Handle last node case *)
+      ELSE
+        current.next.prev := current.prev;
+      END;
+
+      DEC(l.Count);  (* Decrement the count after deletion *)
+      result := TRUE;
       RETURN result;
+    END;
+    current := current.next;
+  END;
+
+  RETURN result;  (* Return FALSE if no node was found/deleted *)
+END DeleteNode;
+*)
+
+PROCEDURE DeleteNode*(l: TList; n: Node): BOOLEAN;
+VAR
+  current: Node;
+  result: BOOLEAN;
+BEGIN
+  result := FALSE;
+  current := l.First;
+
+  WHILE current # NIL DO
+    IF current = n THEN
+
+      (* Adjust pointers to remove the node *)
+      IF current.prev = NIL THEN
+        l.First := current.next  (* Handle first node case *)
+      ELSE
+        current.prev.next := current.next;
+      END;
+
+      IF current.next = NIL THEN
+        l.Last := current.prev  (* Handle last node case *)
+      ELSE
+        current.next.prev := current.prev;
+      END;
+
+      DEC(l.Count);  (* Decrement the count after deletion *)
+      result := TRUE;
+      RETURN result;
+    END;
+    current := current.next;
+  END;
+
+  RETURN result;  (* Return FALSE if no node was found/deleted *)
 END DeleteNode;
 
 PROCEDURE Empty* (l : TList) : BOOLEAN;
