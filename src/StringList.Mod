@@ -77,10 +77,12 @@ BEGIN
       Out.String("'. Comparing with '"); Out.String(s); Out.String("': ");
       *)
       IF strUtils.Compare(tagStr^, s) = strUtils.equal THEN
-        Out.String("Equal"); Out.Ln;
+        (*Out.String("Equal"); Out.Ln;*)
         found := TRUE;
+      (*
       ELSE
         Out.String("Not Equal"); Out.Ln;
+      *)
       END;
     ELSE
       Out.String("Node object is NIL, skipping comparison."); Out.Ln;
