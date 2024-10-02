@@ -71,10 +71,11 @@ BEGIN
       tagStr := e.obj(TString).str;
 
       (* Debugging output to see the comparison process *)
+      (*
       Out.String("Traversing node ["); Out.Int(i, 0); Out.String("]: '");
       Out.String(tagStr^);
       Out.String("'. Comparing with '"); Out.String(s); Out.String("': ");
-
+      *)
       IF strUtils.Compare(tagStr^, s) = strUtils.equal THEN
         Out.String("Equal"); Out.Ln;
         found := TRUE;
@@ -90,7 +91,7 @@ BEGIN
   END;
 
   IF found THEN
-    Out.String("IndexOf returned index: "); Out.Int(i-1, 0); Out.Ln;  (* Adjust to return 0-based index *)
+    (*Out.String("IndexOf returned index: "); Out.Int(i-1, 0); Out.Ln; *)  (* Adjust to return 0-based index *)
     RETURN i-1;
   ELSE
     RETURN -1;
@@ -161,7 +162,7 @@ END DeleteNode;
    i := l.Add(l, str);  (* Add the tag as a new node in the list *)
 
    (* Debugging: Output the added string and the list node info *)
-   Out.String("Added string to TStringList: '"); Out.String(s); Out.String("' at index "); Out.Int(i, 0); Out.Ln;
+   (*Out.String("Added string to TStringList: '"); Out.String(s); Out.String("' at index "); Out.Int(i, 0); Out.Ln;*)
 
    RETURN i;
  END AddString;
