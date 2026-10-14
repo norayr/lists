@@ -101,45 +101,8 @@ BEGIN
 END IndexOf;
 
 PROCEDURE DeleteNode*(l: TList; n: Node): BOOLEAN;
-VAR
-  current: Node;
-  result: BOOLEAN;
 BEGIN
-  result := FALSE;
-  current := l.First;
-
-  WHILE current # NIL DO
-    IF current = n THEN
-      (* Debugging: Print node to be removed *)
-      Out.String("Deleting node: '");
-      IF current.obj # NIL THEN
-        Out.String(current.obj(TString).str^);
-      ELSE
-        Out.String("NIL node");
-      END;
-      Out.String("'"); Out.Ln;
-
-      (* Adjust pointers to remove the node *)
-      IF current.prev = NIL THEN
-        l.First := current.next;  (* Handle first node case *)
-      ELSE
-        current.prev.next := current.next;
-      END;
-
-      IF current.next = NIL THEN
-        l.Last := current.prev;  (* Handle last node case *)
-      ELSE
-        current.next.prev := current.prev;
-      END;
-
-      DEC(l.Count);  (* Decrement the count after deletion *)
-      result := TRUE;
-      RETURN result;
-    END;
-    current := current.next;
-  END;
-
-  RETURN result;  (* Return FALSE if no node was found/deleted *)
+  RETURN List.DeleteNode(l, n)
 END DeleteNode;
 
  PROCEDURE GetString*(l : TStringList; i: LONGINT ): pstring;
@@ -147,7 +110,8 @@ END DeleteNode;
    e: Node;
    p: pstring;
  BEGIN
-   e := l.Get(l, i);
+    e := l.Get(l, i);
+    IF (e = NIL) OR (e.obj = NIL) THEN RETURN NIL END;
    p := e.obj(TString).str;
    RETURN p
  END GetString;
@@ -181,16 +145,16 @@ END DeleteNode;
 
 PROCEDURE DumpOut*(VAR s : TStringList);
 VAR e : Node;
-    i : INTEGER;
+    i : LONGINT;
 BEGIN
    NEW(e);
    i := 0;
-   REPEAT
+   WHILE i < s.Count DO
       e := s.Get(s, i);
       IF e # NIL THEN Out.String (e.obj(TString).str^); Out.Ln END;
       (*Out.String (e.string); Out.Ln;*)
       INC(i);
-   UNTIL i = s.Count;
+   END;
 END DumpOut;
 
  PROCEDURE Dump*(l: TStringList; name: ARRAY OF CHAR);
@@ -198,7 +162,7 @@ END DumpOut;
    F : Files.File;
    R : Files.Rider;
    e : Node;
-   i : INTEGER;
+   i : LONGINT;
    eol: ARRAY 1 OF CHAR;
  BEGIN
    eol[0] := 0AX;
@@ -206,14 +170,14 @@ END DumpOut;
    Files.Set(R, F, 0);
    NEW(e);
    i := 0;
-   REPEAT
+   WHILE i < l.Count DO
      e := l.Get(l, i);
      IF e # NIL THEN
        Files.WriteBytes(R, e.obj(TString).str^, Strings.Length(e.obj(TString).str^));
        Files.WriteBytes(R, eol, 1);
      END;
      INC(i)
-   UNTIL i = l.Count;
+   END;
    Files.Register(F);
  END Dump;
 
@@ -246,29 +210,30 @@ l.AppendString:= AppendString;
 PROCEDURE StringListTopstrings*(VAR s: TStringList; VAR d: pstrings);
 VAR
   e  : Node;
-  i  : INTEGER;
+  i  : LONGINT;
 BEGIN
+  IF s.Count = 0 THEN d := NIL; RETURN END;
   NEW(d, s.Count);
   i := 0;
-  REPEAT
+  WHILE i < s.Count DO
     e := s.Get(s, i);
     d[i] := e.obj(TString).str;
     INC(i)
-  UNTIL i = s.Count;
+  END;
 END StringListTopstrings;
 
 PROCEDURE list*(VAR s : TStringList);
 VAR e : Node;
-    i : INTEGER;
+    i : LONGINT;
 BEGIN
    NEW(e);
    i := 0;
-   REPEAT
+   WHILE i < s.Count DO
       e := s.Get(s, i);
       IF e # NIL THEN Out.String (e.obj(TString).str^); Out.Ln END;
       (*Out.String (e.string); Out.Ln;*)
       INC(i);
-   UNTIL i = s.Count-1;
+   END;
 END list;
 
 

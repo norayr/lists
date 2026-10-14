@@ -76,50 +76,46 @@ First*, Last* : Node;
     l.res := TRUE
  END Append;
 
- PROCEDURE AppendList* (s, l : TList);
- VAR e : Node;
-     i : LONGINT;
+  PROCEDURE AppendList* (s, l : TList);
+  VAR e : Node;
+      i, count : LONGINT;
  BEGIN
    l.res := FALSE;
-   IF s # NIL THEN
-     i := 0;
-     REPEAT
+    IF s # NIL THEN
+      count := s.Count;
+      i := 0;
+      WHILE i < count DO
        e := s.Get(s, i);
        IF e # NIL THEN
          l.Append(l, e.obj);
        END;
        INC(i);
-     UNTIL (i = s.Count) OR (e = NIL);
+      END;
    END
  END AppendList;
 
 
 
- PROCEDURE Insert*(l : TList; i : LONGINT; s : TObject);
+  PROCEDURE ^Get*(l : TList; k : LONGINT) : Node;
+
+  PROCEDURE Insert*(l : TList; i : LONGINT; s : TObject);
  VAR
-   e, u, p : Node;
-         j : LONGINT;
+    e, u : Node;
  BEGIN
-    l.res := FALSE;
-    NEW(e);
-    e.obj := s;
-    NEW(u); NEW(p);
-    IF i = 0 THEN
-       e.next := l.First;
-       e.prev := NIL;
-       l.First := e;
-    ELSE
-       j := 0;
-       u := l.First;
-       WHILE j # i DO
-          p := u;
-          u := u.next;
-          INC(j);
-       END;
-       e.prev := p;
-       p.next := e;
-       e.next := u;
-    END;
+     l.res := FALSE;
+     IF (i < 0) OR (i > l.Count) THEN RETURN END;
+     IF i = l.Count THEN Append(l, s); RETURN END;
+     u := Get(l, i);
+     NEW(e);
+     e.obj := s;
+     e.next := u;
+     e.prev := u.prev;
+     IF u.prev = NIL THEN
+        l.First := e;
+     ELSE
+        u.prev.next := e;
+     END;
+     u.prev := e;
     l.res := TRUE;
     INC(l.Count);
  END Insert;
@@ -141,7 +137,6 @@ First*, Last* : Node;
  VAR i : LONGINT;
      e : Node;
  BEGIN
-    NEW(e);
     e := NIL;
     l.res := FALSE;
     IF (k < l.Count) & (k >= 0)  THEN
@@ -156,26 +151,14 @@ First*, Last* : Node;
     RETURN e;
  END Get;
 
- PROCEDURE Delete* (l : TList; k : LONGINT);
- VAR i : LONGINT;
-     e, p : Node;
+  PROCEDURE Delete* (l : TList; k : LONGINT);
+  VAR e : Node;
  BEGIN
-    l.res := FALSE;
-    IF (k >= 0) & (k < l.Count) THEN
-       NEW(p); NEW(e);
-       e := l.First;
-       p := l.First;
-       IF k = 0 THEN
-          l.First := l.First.next
-       ELSE
-          i := 0;
-          WHILE i # k DO
-             p := e;
-       e := e.next;
-       INC(i);
-          END;
-          IF e.next # NIL THEN p.next := e.next ELSE p.next := NIL END;
-       END;
+     l.res := FALSE;
+     IF (k >= 0) & (k < l.Count) THEN
+        e := Get(l, k);
+        IF e.prev = NIL THEN l.First := e.next ELSE e.prev.next := e.next END;
+        IF e.next = NIL THEN l.Last := e.prev ELSE e.next.prev := e.prev END;
        DEC(l.Count);
        l.res := TRUE;
     END;
@@ -187,6 +170,7 @@ VAR
   result: BOOLEAN;
 BEGIN
   result := FALSE;
+  l.res := FALSE;
   current := l.First;
 
   WHILE current # NIL DO
@@ -215,6 +199,7 @@ BEGIN
 
       DEC(l.Count);  (* Decrement the count after deletion *)
       result := TRUE;
+      l.res := TRUE;
       RETURN result;
     END;
     current := current.next;
